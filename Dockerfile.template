@@ -1,0 +1,16 @@
+FROM balenalib/%%BALENA_MACHINE_NAME%%-debian-node:12.7.0
+SHELL ["/bin/bash", "-c"]
+
+# Install rustup
+RUN apt-get update
+RUN apt-get install -y curl gcc libc6-dev pkg-config
+RUN sh -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
+
+RUN apt-get install -y libasound2 libasound2-dev
+WORKDIR /usr/src/app
+COPY Cargo.toml /usr/src/app/Cargo.toml
+COPY src /usr/src/app/src
+RUN /bin/bash -c "source /root/.cargo/env && RUSTFLAGS=-Ccodegen-units=1 cargo build --release"
+RUN mv /usr/src/app/target/release/midi_alert_client_poc /usr/bin/midi_alert_client_poc
+RUN rm -rf /usr/src/app
+CMD ["/usr/bin/midi_alert_client_poc"]

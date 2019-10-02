@@ -1,0 +1,14 @@
+[package]
+name = "midi_alert_client_poc"
+version = "0.1.0"
+authors = ["Seb Renauld <seb.renauld@gmail.com>"]
+edition = "2018"
+
+[profile.release]
+panic = "abort"
+lto = false
+
+[dependencies]
+serenity = "0.7"
+midir = "0.5"
+futures = "0.1"
